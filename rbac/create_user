@@ -27,5 +27,4 @@ kubectl apply -f <the csr>
 
 kubectl certificate approve user-csr-nikolaer-nikolas
 
-kubectl get csr user-nikolas -o jsonpath='{.status.certificate}' | base64 -d > nikolas.pem
-
+kubectl get csr user-csr-nikolas -o jsonpath='{.status.certificate}' | base64 -d > nikolas.pem
