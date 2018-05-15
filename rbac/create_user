@@ -1,0 +1,31 @@
+First we have to generate the private key:
+
+openssl genrsa -out nikolas-key.pem 2048
+
+and the certificate signing request:
+
+openssl req -new -key nikolas-key.pem -out nikolas.csr -subj "/CN=nikolas"
+
+The common name of the certificate is important, since it defines the username of the new user.
+
+Create a new certificate signing request (embed the certificate in base64):
+
+apiVersion: certificates.k8s.io/v1beta1
+kind: CertificateSigningRequest
+metadata:
+  name: user-csr-nikolas
+spec:
+  groups:
+  - system:authenticated
+  request: <the base64 of the csr>
+  usages:
+  - digital signature
+  - key encipherment
+  - client auth
+
+kubectl apply -f <the csr>
+
+kubectl certificate approve user-csr-nikolaer-nikolas
+
+kubectl get csr user-nikolas -o jsonpath='{.status.certificate}' | base64 -d > nikolas.pem
+
